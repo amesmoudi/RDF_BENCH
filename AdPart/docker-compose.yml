@@ -1,14 +1,23 @@
 version: "3.9"
 services:
+  base_image:
+    image: adpart_base_image
+    build:
+      context: './build/base'
+    command: /bin/true
   master:
     hostname: adpart-master-1
-    build: './build/'
+    build: './build/master'
     volumes:
       - ../data:/data/
     environment:
       - DISPLAY=host.docker.internal:0
+    depends_on:
+      - base_image
   worker:
-    build: './build/'
+    build: './build/worker'
+    depends_on:
+      - base_image
     deploy:
       mode: replicated
       replicas: 2

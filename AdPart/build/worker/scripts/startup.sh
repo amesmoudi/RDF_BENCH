@@ -1,3 +1,3 @@
 /etc/init.d/ssh start
-./Release/mgmt
+ADHASH_HOME=/root/AdPart
 sleep 30d
