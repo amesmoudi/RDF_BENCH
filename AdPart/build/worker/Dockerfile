@@ -1,5 +1,5 @@
 FROM adpart_base_image:latest
-COPY scripts/startup.sh /root/
+RUN mkdir -p /var/run/sshd
 RUN dbus-uuidgen --ensure \
     && git clone https://github.com/razen-alharbi/AdPart.git \
     && cd /root/AdPart \
@@ -8,4 +8,5 @@ RUN dbus-uuidgen --ensure \
 
 ENV ADHASH_HOME=/root/AdPart
 WORKDIR /root/AdPart
-CMD ["sh", "/root/startup.sh"]
+EXPOSE 22
+CMD ["/usr/sbin/sshd", "-D"]

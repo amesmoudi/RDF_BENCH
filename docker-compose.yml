@@ -1,0 +1,93 @@
+version: '3.9'
+
+services:
+  master:
+    image: adpart-master:latest
+    hostname: adpart-master-1
+    volumes:
+      - /data:/data/
+    ports:
+      - "2222:22"
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == bench-master
+    networks:
+      - adpart-network
+
+  worker01:
+    image: adpart-worker:latest
+    hostname: adpart-worker01
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == worker01
+    networks:
+      - adpart-network
+
+  worker02:
+    image: adpart-worker:latest
+    hostname: adpart-worker02
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == worker02
+    networks:
+      - adpart-network
+  worker03:
+    image: adpart-worker:latest
+    hostname: adpart-worker03
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == worker03
+    networks:
+      - adpart-network
+  worker04:
+    image: adpart-worker:latest
+    hostname: adpart-worker04
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == worker04
+    networks:
+      - adpart-network
+  worker05:
+    image: adpart-worker:latest
+    hostname: adpart-worker05
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == worker05
+    networks:
+      - adpart-network
+  worker06:
+    image: adpart-worker:latest
+    hostname: adpart-worker06
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == worker06
+    networks:
+      - adpart-network
+  worker07:
+    image: adpart-worker:latest
+    hostname: adpart-worker07
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == worker07
+    networks:
+      - adpart-network
+
+networks:
+  adpart-network:
+    driver: overlay

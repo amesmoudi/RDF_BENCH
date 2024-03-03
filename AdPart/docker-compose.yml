@@ -8,6 +8,8 @@ services:
   master:
     hostname: adpart-master-1
     build: './build/master'
+    ports:
+      - "2222:22"
     volumes:
       - ../data:/data/
     environment:
