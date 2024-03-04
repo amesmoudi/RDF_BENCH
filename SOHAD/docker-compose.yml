@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  base:
+    build:
+      context: './build/base'
+    image: sohad_base
+
+  master:
+    build:
+      context: './build/master'
+    image: sohad_master
+
+  worker:
+    build:
+      context: './build/worker'
+    image: sohad_worker

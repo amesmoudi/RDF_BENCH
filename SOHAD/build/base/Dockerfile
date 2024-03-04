@@ -1,0 +1,113 @@
+FROM ubuntu:latest
+
+RUN apt-get update \
+    && apt install -y arp-scan python3 gnupg2 curl nano openjdk-8-jdk pip ssh git openssh-server  \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+
+RUN mkdir -p /root/.ssh/
+ADD ssh/* /root/.ssh/
+RUN chmod 600 /root/.ssh/id_rsa
+RUN chmod 600 /root/.ssh/id_ed25519
+
+WORKDIR /root/
+
+
+#environment variables for changing JDK, HADOOP versions and directoris
+ENV HADOOP_VER=2.6.0
+ENV HADOOP_ROOT_VER=2.6
+ENV SPARK_VER=1.3.1
+ENV SCALA_VER=2.10
+ENV HIVE_VER=1.1.0
+ENV JDK_TAR_NAME=jdk.tar.gz
+ENV HADOOP_TAR_NAME=hadoop.tar.gz
+ENV SPARK_TAR_NAME=spark.tgz
+ENV HIVE_TAR_NAME=hive.tar.gz
+
+#***setup JDK***#
+WORKDIR /opt
+#ADD ./ressources/${JDK_TAR_NAME} /opt/
+#ADD automatically untars
+
+#add path variables for JDK
+ENV JAVA_HOME=/lib/jvm/java-1.8.0-openjdk-amd64
+ENV PATH=$PATH:$JAVA_HOME:$JAVA_HOME/bin
+
+
+
+#***setup hadoop***#
+RUN wget https://archive.apache.org/dist/hadoop/core/hadoop-${HADOOP_VER}/hadoop-${HADOOP_VER}.tar.gz
+RUN tar xvfz hadoop-${HADOOP_VER}.tar.gz
+
+
+#Path variables and environment variables for HADOOP
+
+ENV HADOOP_HOME=/opt/hadoop-${HADOOP_VER}
+ENV HADOOP_STREAMING_JAR=${HADOOP_HOME}/share/hadoop/tools/lib/hadoop-streaming-${HADOOP_VER}.jar
+ENV HADOOP_INSTALL=${HADOOP_HOME}
+ENV HADOOP_MAPRED_HOME=${HADOOP_HOME}
+ENV HADOOP_COMMON_HOME=${HADOOP_HOME}
+ENV HADOOP_HDFS_HOME=${HADOOP_HOME}
+ENV HADOOP_YARN_HOME=${HADOOP_HOME}
+ENV HADOOP_COMMON_LIB_NATIVE_DIR=${HADOOP_HOME}/lib/native
+ENV PATH=$PATH:${HADOOP_HOME}/sbin:${HADOOP_HOME}/bin:${JAVA_HOME}/bin
+ENV HADOOP_OPTS="-Djava.library.path=${HADOOP_HOME}/lib/native"
+ENV HADOOP_USER_CLASSPATH_FIRST=true
+ENV HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
+ENV YARN_CONF_DIR=$HADOOP_HOME/etc/hadoop
+ENV HDFS_NAMENODE_USER="root"
+ENV HDFS_DATANODE_USER="root"
+ENV HDFS_SECONDARYNAMENODE_USER="root"
+ENV YARN_RESOURCEMANAGER_USER="root"
+ENV YARN_NODEMANAGER_USER="root"
+
+#Scala
+
+#ENV SCALA_HOME=/usr/share/scala-${SCALA_VER}
+#ENV PATH=.:$SCALA_HOME/bin:$PATH
+
+
+#***CONFIGURATION***#
+#adding hadoop configuration files
+ADD ./config-files/hadoop-env.sh $HADOOP_HOME/etc/hadoop/
+ADD ./config-files/core-site.xml $HADOOP_HOME/etc/hadoop/
+ADD ./config-files/hdfs-site.xml $HADOOP_HOME/etc/hadoop/
+ADD ./config-files/yarn-site.xml $HADOOP_HOME/etc/hadoop/
+ADD ./config-files/mapred-site.xml $HADOOP_HOME/etc/hadoop/
+
+#***SPARK ***#
+RUN wget https://archive.apache.org/dist/spark/spark-${SPARK_VER}/spark-${SPARK_VER}-bin-hadoop${HADOOP_ROOT_VER}.tgz
+RUN tar xvfz spark-1.3.1-bin-hadoop2.6.tgz
+
+# Path variables and environment variables for Spark 
+ENV SPARK_HOME=/opt/spark-${SPARK_VER}-bin-hadoop${HADOOP_ROOT_VER}
+ENV PATH=$PATH:$SPARK_HOME/bin
+ENV SPARK_OPTS="--master yarn"
+
+#adding hadoop configuration files
+ADD ./config-files/spark-env.sh $SPARK_HOME/conf/
+ADD ./config-files/spark-defaults.conf $SPARK_HOME/conf/
+
+
+# Install SBT
+RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee /etc/apt/sources.list.d/sbt.list
+RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | tee /etc/apt/sources.list.d/sbt_old.list
+RUN curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | apt-key add
+RUN apt-get update
+RUN apt-get install sbt -y
+
+
+
+
+# Hive installation
+RUN wget https://archive.apache.org/dist/hive/hive-1.1.0/apache-hive-${HIVE_VER}-bin.tar.gz
+ENV HIVE_HOME=/opt/apache-hive-${HIVE_VER}-bin
+ENV PATH=$PATH:$HIVE_HOME/bin
+ADD ./config-files/hive-site.xml $HIVE_HOME/conf/
+
+
+
+EXPOSE 22
+RUN mkdir -p /var/run/sshd
+CMD ["/usr/sbin/sshd", "-D"]

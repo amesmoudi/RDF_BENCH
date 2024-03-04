@@ -68,7 +68,7 @@ docker stack rm adpart
 2. Deploy the `adpart` stack using the `docker-compose.yml` file:
 
 ```bash
-docker stack deploy -c docker-compose.yml adpart
+docker stack deploy -c AdPart/docker-compose-deploy.yml adpart
 ```
 
 3. Check the status of the services:

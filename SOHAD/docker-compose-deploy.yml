@@ -1,0 +1,88 @@
+version: '3.9'
+
+services:
+  master:
+    image: sohad_master:latest
+    hostname: master
+    volumes:
+      - ./hdfs:/opt/hdfs/
+    ports:
+      - "2222:22"
+      - "9870:9870"
+      - "8088:8088"
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == bench-master
+    networks:
+      - sohad-network
+
+  worker01:
+    image: sohad_worker:latest
+    hostname: worker01
+    volumes:
+      - ./hdfs:/opt/hdfs/
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == worker01
+    networks:
+      - sohad-network
+
+  worker02:
+    image: sohad_worker:latest
+    hostname: worker02
+    volumes:
+      - ./hdfs:/opt/hdfs/
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == worker02
+    networks:
+      - sohad-network
+
+  worker03:
+    image: sohad_worker:latest
+    hostname: worker03
+    volumes:
+      - ./hdfs:/opt/hdfs/
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == worker03
+    networks:
+      - sohad-network
+
+  worker04:
+    image: sohad_worker:latest
+    hostname: worker04
+    volumes:
+      - ./hdfs:/opt/hdfs/
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == worker04
+    networks:
+      - sohad-network
+
+  worker05:
+    image: sohad_worker:latest
+    hostname: worker05
+    volumes:
+      - ./hdfs:/opt/hdfs/
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == worker05
+    networks:
+      - sohad-network
+
+networks:
+  sohad-network:
+    driver: overlay
