@@ -16,18 +16,31 @@ git clone git@github.com:amesmoudi/RDF_BENCH.git
 cd /home/ubuntu/RDF_BENCH
 parallel-ssh -i -h hosts.txt "sudo rm -r /home/ubuntu/RDF_BENCH"
 parallel-ssh -i -h hosts.txt "git clone git@github.com:amesmoudi/RDF_BENCH.git"
-sh SOHAD/build-master-image.sh&
-
-cd ..
-
-parallel-ssh -i -h hosts.txt "sh ./RDF_BENCH/SOHAD/build-master-image.sh&"
-
-python3 generate_compose.py 5
-
-where 5 is the number of workers
+sh SOHAD/build-master-image.sh > build-master.log &
 
 
+parallel-ssh -i -h hosts.txt "nohup sh ./RDF_BENCH/SOHAD/build-worker-image.sh > build-worker.log 2>&1 &"
+parallel-ssh -i -h hosts.txt "tail -f build-worker.log"
 
+python3 SOHAD/generate_compose.py 7
 
+where 7 is the number of workers
+
+docker stack rm sohad
+
+2. Deploy the `sohad` stack using the `docker-compose-deploy.yml` file:
+
+```bash
+docker stack deploy -c docker-compose-deploy.yml sohad
+```
+
+3. Check the status of the services:
+
+```bash
+docker stack services sohad
+```
+
+ssh root@localhost -p 2222 "sh startup.sh 7"
+è est le nombre de workers
 
 
