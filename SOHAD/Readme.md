@@ -16,11 +16,11 @@ git clone git@github.com:amesmoudi/RDF_BENCH.git
 cd /home/ubuntu/RDF_BENCH
 parallel-ssh -i -h hosts.txt "sudo rm -r /home/ubuntu/RDF_BENCH"
 parallel-ssh -i -h hosts.txt "git clone git@github.com:amesmoudi/RDF_BENCH.git"
-cd /home/ubuntu/RDF_BENCH/SOHAD/;docker compose build base
-cd /home/ubuntu/RDF_BENCH/SOHAD/;docker compose build master
+sh SOHAD/build-master-image.sh&
 
-parallel-ssh -i -h hosts.txt "cd /home/ubuntu/SOHAD/AdPart/;docker compose build base"
-parallel-ssh -i -h hosts.txt "cd /home/ubuntu/SOHAD/AdPart/;docker compose build worker"
+cd ..
+
+parallel-ssh -i -h hosts.txt "sh ./RDF_BENCH/SOHAD/build-master-image.sh&"
 
 python3 generate_compose.py 5
 
