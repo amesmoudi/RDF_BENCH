@@ -19,7 +19,7 @@ services:
     image: sohad_master:latest
     hostname: master
     volumes:
-      - ./hdfs:/opt/hdfs/
+      - /hdfs:/opt/hdfs/
     ports:
       - "2222:22"
       - "9870:9870"
@@ -40,7 +40,7 @@ for i in range(1, number_of_workers + 1):
     image: sohad_worker:latest
     hostname: worker{i:02d}
     volumes:
-      - ./hdfs:/opt/hdfs/
+      - /hdfs:/opt/hdfs/
     deploy:
       replicas: 1
       placement:
