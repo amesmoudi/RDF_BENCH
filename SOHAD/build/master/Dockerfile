@@ -1,8 +1,10 @@
 FROM sohad_base:latest
-ADD ./config-files/workers $HADOOP_HOME/etc/hadoop/
-ADD ./scripts/startup.sh .
-RUN chmod +x startup.sh
-ADD ./scripts/genworkers.py .
-WORKDIR /opt/
+WORKDIR /root/
+ADD ./scripts/start-existingCluster.sh /root/
+RUN chmod +x start-existingCluster.sh /root/
+ADD ./scripts/genworkers.py /root/
+ADD ./scripts/start-newCluster.sh /root/
+RUN chmod +x start-newCluster.sh
+CMD ["/usr/sbin/sshd", "-D"]
 
 

@@ -7,7 +7,7 @@ def generate_worker_ids(num_workers, output_file):
             file.write(worker_id + '\n')
 
 def main():
-    if len(sys.argv) != 3:
+    if len(sys.argv) != 2:
         print("Usage: python genworkers.py <num_workers>")
         return
 
