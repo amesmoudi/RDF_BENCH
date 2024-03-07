@@ -7,7 +7,7 @@ ADD ./scripts/start-newCluster.sh /root/
 RUN chmod +x start-newCluster.sh
 ADD ./scripts/hostsProg.sh /root/
 RUN chmod +x hostsProg.sh
-RUN apt -y install dnsutils
+RUN apt -y install dnsutils iputils-ping
 CMD ["/usr/sbin/sshd", "-D"]
 
 
