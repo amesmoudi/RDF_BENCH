@@ -22,7 +22,7 @@ services:
       - /hdfs:/opt/hdfs/
     ports:
       - "2222:22"
-      - "9870:9870"
+      - "50070:50070"
       - "8088:8088"
     deploy:
       replicas: 1
