@@ -31,4 +31,4 @@ hdfs dfs -chmod g+w /user/hive/warehouse
 hdfs dfs -mkdir -p /user/root/
 
 # Initialize the Hive schema
-$HIVE_HOME/bin/schematool -initSchema -dbType derby
+#$HIVE_HOME/bin/schematool -initSchema -dbType derby
