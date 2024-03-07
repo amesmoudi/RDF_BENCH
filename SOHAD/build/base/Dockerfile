@@ -102,6 +102,7 @@ RUN apt-get install sbt -y
 
 # Hive installation
 RUN wget https://archive.apache.org/dist/hive/hive-1.1.0/apache-hive-${HIVE_VER}-bin.tar.gz
+RUN tar xvfz spark-${SPARK_VER}-bin-hadoop${HADOOP_ROOT_VER}.tgz
 ENV HIVE_HOME=/opt/apache-hive-${HIVE_VER}-bin
 ENV PATH=$PATH:$HIVE_HOME/bin
 ADD ./config-files/hive-site.xml $HIVE_HOME/conf/
