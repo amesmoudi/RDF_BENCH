@@ -43,4 +43,7 @@ docker stack services sohad
 ssh root@localhost -p 2222 "sh startup.sh 7"
 è est le nombre de workers
 
+sudo rm -r /hdfs/*
+cd RDF_BENCH/
+parallel-ssh -h hosts.txt sudo rm -r /hdfs/*
 

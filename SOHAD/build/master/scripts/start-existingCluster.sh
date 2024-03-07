@@ -14,7 +14,8 @@ echo "Number of workers to generate: $NUMBER"
 
 # Call the python script with the number as an argument
 python3 genworkers.py $NUMBER
-mv workers $HADOOP_HOME/etc/hadoop/workers
+sh hostsProg.sh
+mv workers $HADOOP_HOME/etc/hadoop/slaves
 
 
 # Start HDFS and YARN
