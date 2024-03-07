@@ -1,26 +1,34 @@
-!/bin/bash
+#!/bin/sh
 
-# Fichier contenant la liste des travailleurs
-WORKER_LIST="workers"
+# Chemin du fichier contenant les noms des workers
+workers_file="workers"
 
-# Fichier temporaire pour les entrées de /etc/hosts
-TEMP_HOSTS="/etc/hosts"
+# Chemin du fichier hosts temporaire
+temp_hosts="/tmp/hosts.$$"
 
-# Boucle sur chaque travailleur pour récupérer les entrées et les ajouter à /etc/hosts
-while read worker; do
-    echo "Récupération des entrées de $worker..."
-    ssh $worker "cat /etc/hosts" | grep 'worker*' >> $TEMP_HOSTS &
-done < $WORKER_LIST
+# Copier le contenu actuel de /etc/hosts dans un fichier temporaire
+cp /etc/hosts "$temp_hosts"
 
+while IFS= read -r worker || [ -n "$worker" ]; do
+  if [ ! -z "$worker" ]; then
+    ip_address=$(nslookup "$worker" | awk '/^Address: / { print $2; exit }')
+    if [ ! -z "$ip_address" ]; then
+      grep -q "$worker" "$temp_hosts" || echo "$ip_address $worker" >> "$temp_hosts"
+    else
+      echo "Adresse IP non trouvée pour $worker"
+    fi
+  fi
+done < "$workers_file"
 
-# Ajouter les nouvelles entrées au fichier /etc/hosts local
-#echo "Mise à jour du fichier /etc/hosts local..."
-#cat $TEMP_HOSTS | tee -a /etc/hosts
+cp "$temp_hosts" /etc/hosts && rm "$temp_hosts"
 
-# Propager le fichier /etc/hosts mis à jour à tous les travailleurs
-while read worker; do
-    echo "Propagation du fichier /etc/hosts à $worker..."
-    scp $TEMP_HOSTS $worker:/etc/hosts &
-done < $WORKER_LIST
+echo "Fichier /etc/hosts mis à jour."
 
-#echo "Mise à jour et propagation terminées."
+while IFS= read -r worker || [ -n "$worker" ]; do
+  if [ ! -z "$worker" ]; then
+    echo "Propagation de /etc/hosts vers $worker..."
+    scp /etc/hosts "${worker}:/tmp/hosts.tmp" && ssh -n "${worker}" 'cp /tmp/hosts.tmp /etc/hosts && rm /tmp/hosts.tmp'
+  fi
+done < "$workers_file"
+
+echo "Propagation terminée."
