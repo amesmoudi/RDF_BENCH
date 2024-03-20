@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM ubuntu:trusty
 
 RUN apt-get update \
     && apt install -y arp-scan python3 gnupg2 curl nano openjdk-8-jdk pip ssh git openssh-server  \
@@ -110,9 +110,10 @@ ADD ./config-files/hive-site.xml $HIVE_HOME/conf/
 RUN echo "export JAVA_HOME=${JAVA_HOME}" >> /root/.bashrc \
     && echo "export HADOOP_HOME=${HADOOP_HOME}" >> /root/.bashrc \
     && echo "export SPARK_HOME=${SPARK_HOME}" >> /root/.bashrc \
+    && echo "export HADOOP_CONF_DIR=${SPARK_HOME}/etc/hadoop/" >> /root/.bashrc \
+    && echo "export YARN_CONF_DIR=${SPARK_HOME}/etc/hadoop/" >> /root/.bashrc \
     && echo "export HIVE_HOME=${HIVE_HOME}" >> /root/.bashrc \
     && echo "export PATH=\$PATH:\$JAVA_HOME/bin:\$HADOOP_HOME/bin:\$HADOOP_HOME/sbin:\$SPARK_HOME/bin:\$HIVE_HOME/bin" >> /root/.bashrc
-
 
 EXPOSE 22
 RUN mkdir -p /var/run/sshd

@@ -39,4 +39,36 @@
     <name>yarn.resourcemanager.webapp.address</name>
     <value>master:8088</value>
 </property>
+<property>
+        <name>yarn.scheduler.maximum-allocation-mb</name>
+        <value>16384</value> <!-- Par exemple, 16 GB -->
+</property>
+ <!-- Définit la quantité minimale de mémoire, en MB, que YARN peut allouer pour un conteneur -->
+<property>
+        <name>yarn.scheduler.minimum-allocation-mb</name>
+        <value>1024</value> <!-- Par exemple, 1 GB -->
+</property>
+    <!-- Définit la quantité maximale de vcores que YARN peut allouer pour un conteneur -->
+<property>
+        <name>yarn.scheduler.maximum-allocation-vcores</name>
+        <value>8</value>
+</property>
+    <!-- Définit la quantité minimale de vcores que YARN peut allouer pour un conteneur -->
+<property>
+        <name>yarn.scheduler.minimum-allocation-vcores</name>
+        <value>1</value>
+</property>
+<property>
+   <name>yarn.resourcemanager.admin.address</name>
+   <value>master:8033</value>
+</property>
+<property>
+   <name>yarn.nodemanager.aux-services</name>
+   <value>mapreduce_shuffle</value>
+</property>
+<property>
+   <name>yarn.nodemanager.aux-services.mapreduce.shuffle.class</name>
+   <value>org.apache.hadoop.mapred.ShuffleHandler</value>
+</property>
 </configuration>
+
