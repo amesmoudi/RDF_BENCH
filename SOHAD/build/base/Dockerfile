@@ -1,7 +1,8 @@
 FROM ubuntu:trusty
 
+RUN add-apt-repository ppa:openjdk-r/ppa
 RUN apt-get update \
-    && apt install -y arp-scan python3 gnupg2 curl nano openjdk-8-jdk pip ssh git openssh-server  \
+    && apt install -y arp-scan python2 gnupg2 curl nano openjdk-8-jdk pip ssh git openssh-server  \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

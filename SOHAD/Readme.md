@@ -37,6 +37,7 @@ docker node list
 parallel-ssh -i -h hosts.txt "sudo rm -r /home/ubuntu/RDF_BENCH"
 parallel-ssh -i -h hosts.txt "git clone git@github.com:amesmoudi/RDF_BENCH.git"
 cd /home/ubuntu/RDF_BENCH
+cp ../hosts.txt hosts.txt 
 
 sh SOHAD/build-master-image.sh > build-master.log &
 
@@ -50,6 +51,13 @@ rm docker-compose-deploy.yml
 python3 generate_compose.py 4
 
 where 7 is the number of workers
+
+
+1. Remove the existing stack if necessary:
+
+```bash
+docker stack rm sohad
+```
 
 2. Deploy the `sohad` stack using the `docker-compose-deploy.yml` file:
 
