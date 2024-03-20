@@ -39,6 +39,8 @@ parallel-ssh -i -h hosts.txt "git clone git@github.com:amesmoudi/RDF_BENCH.git"
 cd /home/ubuntu/RDF_BENCH
 cp ../hosts.txt hosts.txt 
 
+remove master's ip
+
 sh SOHAD/build-master-image.sh > build-master.log &
 
 

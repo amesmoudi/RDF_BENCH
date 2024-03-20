@@ -1,11 +1,16 @@
 FROM ubuntu:trusty
 
+# Installe software-properties-common pour add-apt-repository
+RUN apt-get update && apt-get install -y software-properties-common
+
+# Ajoute le PPA pour OpenJDK
 RUN add-apt-repository ppa:openjdk-r/ppa
+
+# Met à jour les paquets et installe les logiciels nécessaires
 RUN apt-get update \
-    && apt install -y arp-scan python2 gnupg2 curl nano openjdk-8-jdk pip ssh git openssh-server  \
+    && apt-get install -y arp-scan python2 gnupg2 curl nano openjdk-8-jdk python-pip ssh git openssh-server  \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-
 
 RUN mkdir -p /root/.ssh/
 ADD ssh/* /root/.ssh/
