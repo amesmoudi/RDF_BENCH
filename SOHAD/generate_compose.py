@@ -26,6 +26,11 @@ services:
       - "8088:8088"
     deploy:
       replicas: 1
+      resources:
+        limits:
+          memory: 30G # Limite la mémoire à 500 Mo
+        reservations:
+          memory: 28G # Réserve au moins 200 Mo de mémoire pour ce service
       placement:
         constraints:
           - node.hostname == bench-master
@@ -43,6 +48,11 @@ for i in range(1, number_of_workers + 1):
       - /hdfs:/opt/hdfs/
     deploy:
       replicas: 1
+      resources:
+        limits:
+          memory: 30G # Limite la mémoire à 30 Go
+        reservations:
+          memory: 28G # Réserve au moins 28G de mémoire pour ce service
       placement:
         constraints:
           - node.hostname == worker{i:02d}
