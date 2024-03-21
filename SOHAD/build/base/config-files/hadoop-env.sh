@@ -34,7 +34,7 @@
 # may want to provide OVERWRITING values on the command line.
 # For example:
 #
-JAVA_HOME=/lib/jvm/java-1.8.0-openjdk-amd64
+JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-amd64
 #
 # Therefore, the vast majority (BUT NOT ALL!) of these defaults
 # are configured for substitution and not append.  If append
