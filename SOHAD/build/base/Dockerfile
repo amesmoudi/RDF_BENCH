@@ -8,7 +8,7 @@ RUN add-apt-repository ppa:openjdk-r/ppa
 
 # Met à jour les paquets et installe les logiciels nécessaires
 RUN apt-get update \
-    && apt-get install -y arp-scan python2 gnupg2 curl nano openjdk-8-jdk python-pip ssh git openssh-server  \
+    && apt-get install -y arp-scan python gnupg unzip curl nano openjdk-7-jdk python-pip ssh git openssh-server apt-transport-https ca-certificates  \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -37,13 +37,13 @@ WORKDIR /opt
 #ADD automatically untars
 
 #add path variables for JDK
-ENV JAVA_HOME=/lib/jvm/java-1.8.0-openjdk-amd64
+ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64
 ENV PATH=$PATH:$JAVA_HOME:$JAVA_HOME/bin
 
 
 
 #***setup hadoop***#
-RUN wget https://archive.apache.org/dist/hadoop/core/hadoop-${HADOOP_VER}/hadoop-${HADOOP_VER}.tar.gz
+RUN wget --no-check-certificate https://archive.apache.org/dist/hadoop/core/hadoop-${HADOOP_VER}/hadoop-${HADOOP_VER}.tar.gz
 RUN tar xvfz hadoop-${HADOOP_VER}.tar.gz
 
 
@@ -83,7 +83,7 @@ ADD ./config-files/yarn-site.xml $HADOOP_HOME/etc/hadoop/
 ADD ./config-files/mapred-site.xml $HADOOP_HOME/etc/hadoop/
 
 #***SPARK ***#
-RUN wget https://archive.apache.org/dist/spark/spark-${SPARK_VER}/spark-${SPARK_VER}-bin-hadoop${HADOOP_ROOT_VER}.tgz
+RUN wget --no-check-certificate https://archive.apache.org/dist/spark/spark-${SPARK_VER}/spark-${SPARK_VER}-bin-hadoop${HADOOP_ROOT_VER}.tgz
 RUN tar xvfz spark-${SPARK_VER}-bin-hadoop${HADOOP_ROOT_VER}.tgz
 
 # Path variables and environment variables for Spark 
@@ -97,17 +97,22 @@ ADD ./config-files/spark-defaults.conf $SPARK_HOME/conf/
 
 
 # Install SBT
-RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee /etc/apt/sources.list.d/sbt.list
-RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | tee /etc/apt/sources.list.d/sbt_old.list
-RUN curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | apt-key add
-RUN apt-get update
-RUN apt-get install sbt -y
+# Téléchargez et installez SBT
+RUN wget https://github.com/sbt/sbt/releases/download/v0.13.18/sbt-0.13.18.zip && \
+    unzip sbt-0.13.18.zip -d /usr/local && \
+    rm sbt-0.13.18.zip
+
+# Ajoutez sbt au PATH
+ENV PATH /usr/local/sbt/bin:$PATH
+
+# Vérifiez l'installation de sbt
+RUN sbt about
 
 
 
 
 # Hive installation
-RUN wget https://archive.apache.org/dist/hive/hive-1.1.0/apache-hive-${HIVE_VER}-bin.tar.gz
+RUN wget --no-check-certificate https://archive.apache.org/dist/hive/hive-1.1.0/apache-hive-${HIVE_VER}-bin.tar.gz
 RUN tar xvfz apache-hive-${HIVE_VER}-bin.tar.gz
 ENV HIVE_HOME=/opt/apache-hive-${HIVE_VER}-bin
 ENV PATH=$PATH:$HIVE_HOME/bin
