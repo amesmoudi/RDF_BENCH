@@ -20,7 +20,7 @@ def main():
     output_file = "workers"  # You can change the output file name as needed
 
     generate_worker_ids(num_workers, output_file)
-    print(f"{num_workers} worker IDs have been generated and saved to {output_file}.")
+    print("{} worker IDs have been generated and saved to {}.".format(num_workers, output_file))
 
 if __name__ == "__main__":
     main()

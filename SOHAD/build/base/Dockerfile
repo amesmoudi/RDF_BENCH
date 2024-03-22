@@ -21,9 +21,9 @@ WORKDIR /root/
 
 
 #environment variables for changing JDK, HADOOP versions and directoris
-ENV HADOOP_VER=2.6.0
+ENV HADOOP_VER=2.6.5
 ENV HADOOP_ROOT_VER=2.6
-ENV SPARK_VER=1.5.0
+ENV SPARK_VER=1.6.0
 ENV SCALA_VER=2.10
 ENV HIVE_VER=1.1.0
 ENV JDK_TAR_NAME=jdk.tar.gz
@@ -106,7 +106,7 @@ RUN wget https://github.com/sbt/sbt/releases/download/v0.13.18/sbt-0.13.18.zip &
 ENV PATH /usr/local/sbt/bin:$PATH
 
 # Vérifiez l'installation de sbt
-RUN sbt about
+#RUN sbt about
 
 
 

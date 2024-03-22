@@ -7,10 +7,14 @@ ADD ./scripts/start-newCluster.sh /root/
 RUN chmod +x start-newCluster.sh
 ADD ./scripts/hostsProg.sh /root/
 RUN chmod +x hostsProg.sh
+RUN apt-get update
+RUN apt-get install -y dnsutils
 RUN echo "export JAVA_OPTS=\"$JAVA_OPTS -Dhttp.proxyHost=cache.univ-poitiers.fr -Dhttp.proxyPort=3128  -Dhttps.proxyHost=cache.univ-poitiers.fr -Dhttps.proxyPort=3128\"">> /root/.bashrc 
 RUN echo "export http_proxy=http://cache.univ-poitiers.fr:3128">> /root/.bashrc 
 RUN echo "export https_proxy=http://cache.univ-poitiers.fr:3128">> /root/.bashrc 
 RUN echo "export https_proxy=http://cache.univ-poitiers.fr:3128">> /root/.bashrc 
+RUN echo "export PATH=/usr/local/sbt/bin:$PATH">> /root/.bashrc 
+
 CMD ["/usr/sbin/sshd", "-D"]
 
 

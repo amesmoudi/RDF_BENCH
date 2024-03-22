@@ -17,10 +17,10 @@
 <!-- Put site-specific property overrides in this file. -->
 <configuration>
 <property>
-<name>dfs.namenode.name.dir</name><value>/opt/hdfs/namenode</value>
+<name>dfs.namenode.name.dir</name><value>file:///opt/hdfs/namenode</value>
 </property>
 <property>
-<name>dfs.datanode.data.dir</name><value>/opt/hdfs/datanode</value>
+<name>dfs.datanode.data.dir</name><value>file:////opt/hdfs/datanode</value>
 </property>
 <property>
 <name>dfs.replication</name>
