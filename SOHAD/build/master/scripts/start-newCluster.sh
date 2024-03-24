@@ -15,13 +15,16 @@ echo "Number of workers to generate: $NUMBER"
 # Call the python script with the number as an argument
 python3 genworkers.py $NUMBER
 sh hostsProg.sh
-mv workers $HADOOP_HOME/etc/hadoop/slaves
+cp workers $HADOOP_HOME/etc/hadoop/slaves
+mv workers $SPARK_HOME/conf/slaves
+
 # Format the HDFS namenode
 hdfs namenode -format
 
 # Start HDFS and YARN
 start-dfs.sh
-start-yarn.sh
+sh $SPARK_HOME/sbin/start-all.sh
+#start-yarn.sh
 
 # Create necessary HDFS directories
 hdfs dfs -mkdir -p /user/hive/warehouse
@@ -30,5 +33,4 @@ hdfs dfs -chmod g+w /user/tmp
 hdfs dfs -chmod g+w /user/hive/warehouse
 hdfs dfs -mkdir -p /user/root/
 
-# Initialize the Hive schema
-#$HIVE_HOME/bin/schematool -initSchema -dbType derby
+
