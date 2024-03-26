@@ -14,8 +14,11 @@ https://archive.apache.org/dist/hive/hive-1.1.0/apache-hive-1.1.0-bin.tar.gz
 sudo rm -r /home/ubuntu/RDF_BENCH
 git clone git@github.com:amesmoudi/RDF_BENCH.git
 cd /home/ubuntu/RDF_BENCH
+git switch tests
 parallel-ssh -i -h hosts.txt "sudo rm -r /home/ubuntu/RDF_BENCH"
 parallel-ssh -i -h hosts.txt "git clone git@github.com:amesmoudi/RDF_BENCH.git"
+parallel-ssh -i -h hosts.txt "cd /home/ubuntu/RDF_BENCH;git switch tests"
+
 sh SOHAD/build-master-image.sh > build-master.log &
 
 
@@ -23,8 +26,9 @@ parallel-ssh -i -h hosts.txt "nohup sh ./RDF_BENCH/SOHAD/build-worker-image.sh >
 parallel-ssh -i -h hosts.txt "tail -f build-worker.log"
 
 ## Run a new cluster
+cd SOHAD
 rm docker-compose-deploy.yml
-python3 SOHAD/generate_compose.py 7
+python3 generate_compose.py 4
 
 where 7 is the number of workers
 
@@ -41,8 +45,8 @@ docker stack services sohad
 ```
 
 ### from the local machine
-ssh root@10.16.14.170 -p 2222 -L 50070:master:50070 -L 8088:master:8088
-sh start-newCluster.sh 7
+ssh root@10.16.14.182 -p 2222 -L 50070:master:50070 -L 8080:master:8080
+sh start-newCluster.sh 4
 
 
 

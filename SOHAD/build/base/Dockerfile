@@ -1,7 +1,7 @@
 FROM ubuntu:latest
 
 RUN apt-get update \
-    && apt install -y arp-scan python3 python2 gnupg2 curl nano openjdk-8-jre openjdk-8-jdk pip ssh git openssh-server  \
+    && apt install -y arp-scan python3 python2 gnupg2 curl nano dnsutils iputils-ping net-tools openjdk-8-jre openjdk-8-jdk pip ssh git openssh-server  \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
