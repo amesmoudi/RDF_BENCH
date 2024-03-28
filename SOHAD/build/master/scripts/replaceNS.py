@@ -1,3 +1,5 @@
+import sys
+
 # Mappings of full URIs to their abbreviations
 prefixes = {
     "http://purl.org/dc/terms/": "dc:",
@@ -24,9 +26,14 @@ def replace_prefixes(line):
     attributes[1] = second_attribute  # Update the second attribute
     return "\t".join(attributes)  # Join the modified attributes with tabs
 
-# File paths
-source_file_path = 'watdiv.10M.nt'
-destination_file_path = 'watdiv.10M.v2.nt'
+# Verifying the correct number of arguments
+if len(sys.argv) != 3:
+    print("Usage: python script.py <source_file_path> <destination_file_path>")
+    sys.exit(1)
+
+# Assigning the file paths from the command line arguments
+source_file_path = sys.argv[1]
+destination_file_path = sys.argv[2]
 
 # Read the source file, transform, and write the result to the destination file
 with open(source_file_path, 'r', encoding='utf-8') as source_file, \

@@ -12,7 +12,7 @@ driverMemory = "2g"
 # Prefix by "yarn" keyword for yarn cluster 
 sparkMaster = "spark://master:7077"
 # Path to the datsetcreator JAR file
-jarFilePath = "/opt/workspace/DataSetCreator/S2RDF_DataSetCreator/target/scala-2.10/datasetcreator_2.10-1.1.jar"
+jarFilePath = "/opt/workspace/DataSetCreator/S2RDF_DataSetCreator/datasetcreator_2.10-1.1.jar "
 # --------------------------------------------------------------------------------
 
 # DatasetCreator args

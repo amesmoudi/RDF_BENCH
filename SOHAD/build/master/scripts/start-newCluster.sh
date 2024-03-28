@@ -1,10 +1,5 @@
-#!/bin/bash
-
-# Check if exactly one argument is passed to the script
-if [ "$#" -ne 1 ]; then
-    echo "Usage: $0 <number>"
-    exit 1
-fi
+#!/bin/bash -i
+source /root/.bashrc
 
 # Assign the first argument to a variable
 NUMBER=$1

@@ -20,6 +20,7 @@ parallel-ssh -i -h hosts.txt "git clone git@github.com:amesmoudi/RDF_BENCH.git"
 parallel-ssh -i -h hosts.txt "cd /home/ubuntu/RDF_BENCH;git switch tests"
 
 sh SOHAD/build-master-image.sh > build-master.log &
+tail -f build-master.log 
 
 
 parallel-ssh -i -h hosts.txt "nohup sh ./RDF_BENCH/SOHAD/build-worker-image.sh > build-worker.log 2>&1 &"

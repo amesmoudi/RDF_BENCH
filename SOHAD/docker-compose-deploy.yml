@@ -5,13 +5,18 @@ services:
     image: sohad_master:latest
     hostname: master
     volumes:
-      - ./hdfs:/opt/hdfs/
+      - /hdfs:/opt/hdfs/
     ports:
       - "2222:22"
-      - "9870:9870"
+      - "50070:50070"
       - "8088:8088"
     deploy:
       replicas: 1
+      resources:
+        limits:
+          memory: 30G # Limite la mémoire à 500 Mo
+        reservations:
+          memory: 28G # Réserve au moins 200 Mo de mémoire pour ce service
       placement:
         constraints:
           - node.hostname == bench-master
@@ -22,9 +27,14 @@ services:
     image: sohad_worker:latest
     hostname: worker01
     volumes:
-      - ./hdfs:/opt/hdfs/
+      - /hdfs:/opt/hdfs/
     deploy:
       replicas: 1
+      resources:
+        limits:
+          memory: 30G # Limite la mémoire à 30 Go
+        reservations:
+          memory: 28G # Réserve au moins 28G de mémoire pour ce service
       placement:
         constraints:
           - node.hostname == worker01
@@ -35,9 +45,14 @@ services:
     image: sohad_worker:latest
     hostname: worker02
     volumes:
-      - ./hdfs:/opt/hdfs/
+      - /hdfs:/opt/hdfs/
     deploy:
       replicas: 1
+      resources:
+        limits:
+          memory: 30G # Limite la mémoire à 30 Go
+        reservations:
+          memory: 28G # Réserve au moins 28G de mémoire pour ce service
       placement:
         constraints:
           - node.hostname == worker02
@@ -48,9 +63,14 @@ services:
     image: sohad_worker:latest
     hostname: worker03
     volumes:
-      - ./hdfs:/opt/hdfs/
+      - /hdfs:/opt/hdfs/
     deploy:
       replicas: 1
+      resources:
+        limits:
+          memory: 30G # Limite la mémoire à 30 Go
+        reservations:
+          memory: 28G # Réserve au moins 28G de mémoire pour ce service
       placement:
         constraints:
           - node.hostname == worker03
@@ -61,25 +81,17 @@ services:
     image: sohad_worker:latest
     hostname: worker04
     volumes:
-      - ./hdfs:/opt/hdfs/
+      - /hdfs:/opt/hdfs/
     deploy:
       replicas: 1
+      resources:
+        limits:
+          memory: 30G # Limite la mémoire à 30 Go
+        reservations:
+          memory: 28G # Réserve au moins 28G de mémoire pour ce service
       placement:
         constraints:
           - node.hostname == worker04
-    networks:
-      - sohad-network
-
-  worker05:
-    image: sohad_worker:latest
-    hostname: worker05
-    volumes:
-      - ./hdfs:/opt/hdfs/
-    deploy:
-      replicas: 1
-      placement:
-        constraints:
-          - node.hostname == worker05
     networks:
       - sohad-network
 
