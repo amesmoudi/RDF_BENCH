@@ -1,10 +1,5 @@
-#!/bin/bash
-
-# Check if exactly one argument is passed to the script
-if [ "$#" -ne 1 ]; then
-    echo "Usage: $0 <number>"
-    exit 1
-fi
+#!/bin/bash -i
+source /root/.bashrc
 
 # Assign the first argument to a variable
 NUMBER=$1
@@ -14,14 +9,18 @@ echo "Number of workers to generate: $NUMBER"
 
 # Call the python script with the number as an argument
 python3 genworkers.py $NUMBER
-sh hostsProg.sh
-mv workers $HADOOP_HOME/etc/hadoop/slaves
+python3 hostsProg.py
+cp workers $HADOOP_HOME/etc/hadoop/slaves
+cp workers $SPARK_HOME/conf/slaves
+
 # Format the HDFS namenode
 hdfs namenode -format
 
-# Start HDFS and YARN
+# Start HDFS and Spark
 start-dfs.sh
-start-yarn.sh
+start-master.sh
+start-slaves.sh
+
 
 # Create necessary HDFS directories
 hdfs dfs -mkdir -p /user/hive/warehouse
@@ -30,5 +29,4 @@ hdfs dfs -chmod g+w /user/tmp
 hdfs dfs -chmod g+w /user/hive/warehouse
 hdfs dfs -mkdir -p /user/root/
 
-# Initialize the Hive schema
-#$HIVE_HOME/bin/schematool -initSchema -dbType derby
+

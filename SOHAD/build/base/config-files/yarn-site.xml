@@ -17,7 +17,7 @@
 <!-- Site specific YARN configuration properties -->
 <property>
 <name>yarn.nodemanager.resource.memory-mb</name>
-<value>1024</value>
+<value>4096</value>
 </property>
 <property>
 <name>yarn.nodemanager.aux-services</name>
