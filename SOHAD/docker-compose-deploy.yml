@@ -6,6 +6,7 @@ services:
     hostname: master
     volumes:
       - /hdfs:/opt/hdfs/
+      - /data:/data
     ports:
       - "2222:22"
       - "50070:50070"

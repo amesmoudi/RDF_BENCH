@@ -10,9 +10,9 @@ import sys, getopt, subprocess, time, os, errno
 # Spark Settings (Change accordingly to your needs)
 driverMemory = "2g"
 # Prefix by "yarn" keyword for yarn cluster 
-sparkMaster = "spark://dbisma01.informatik.privat:7077"
+sparkMaster = "spark://master:7077"
 # Path to the QueryExecutor JAR file
-jarFilePath = "./S2RDF_QueryExecutor/target/scala-2.10/queryexecutor_2.10-1.0.jar"
+jarFilePath = "/opt/workspace/QueryExecutor/S2RDF_QueryExecutor/target/scala-2.10/queryexecutor_2.10-1.1.jar"
 # --------------------------------------------------------------------------------
 
 # QueryExecutor args

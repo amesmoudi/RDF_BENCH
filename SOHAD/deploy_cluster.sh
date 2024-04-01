@@ -10,5 +10,3 @@ docker stack deploy -c docker-compose-deploy.yml sohad
 sleep 5s
 docker stack services sohad
 ssh -t root@localhost -p 2222 ./start-newCluster.sh $nbworkers
-ssh -t root@localhost -p 2222 mkdir -p /rawdata/watdiv/
-scp -P 2222 data/watdiv100k.nt root@localhost:/rawdata/watdiv/

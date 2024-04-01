@@ -1,132 +1,121 @@
 #!/usr/bin/env python
 #
-# Copyright Simon Skilevic
-# Master Thesis for Chair of Databases and Information Systems
-# Uni Freiburg
-#
-import sys, getopt, subprocess
-# --------------------------------------------------------------------------------
-# Description
 
-# This script generates for every SPARQL query in input directory two SQL queries
-# (for two test cases, e.g. VP vs. ExtVP) using S2RDF_QueryTranslator. Futher more it 
-# adds every generated SQL query to a compositeQueryFile.txt
-# For example: The script generates for input SPARQL query IL5-1-U-2__VP_SO-OS-SS-VP.in
-# and dataset WatDiv1M
-# two SQL queries: IL5-1-U-2--SO-OS-SS-VP__WatDiv1M.sql (using VP+ExtVP tablesets SO,OS,SS)
-# IL5-1-U-2--VP__WatDiv1M.sql (using only VP tableset) Thereby the postfix after '--'
-# defines tablesets for usage in the testcase.
-#
-# Further the script adds both queries to compositeQueryFile:
-# ...
-# >>>>>>IL5-1-U-2--SO-OS-SS-VP__WatDiv1M
-# [sqlQuery from IL5-1-U-2--SO-OS-SS-VP__WatDiv1M.sql]
-# >>>>>>IL5-1-U-2--VP__WatDiv1M
-# [sqlQuery from IL5-1-U-2--VP__WatDiv1M.sql]
-# --------------------------------------------------------------------------------
-# Settings
+import sys
+import getopt
+import subprocess
+import os
 
-# ExtVP tables statistics directory and datasetName
-# WatDiv1M directory corresponds to WatDivScale=10
-# WatDiv1000M directory corresponds to WatDivScale=10000
-dataSetName = "WatDiv1M"
-statisticsDir = "statistics/" + dataSetName + "/"
-# S2RDF QueryTranslator jar
+# --------------------------------------------------------------------------------
+
+dataSetName = None
+statisticsDir = None
 S2RDFQueryTranslator = "/opt/workspace/QueryTranslator/S2RDF_QueryTranslator/queryTranslator-1.1.jar"
-# upper bound for scale
-scaleUB = "1"
+scaleUB = "0.25"
+
 # --------------------------------------------------------------------------------
 
-# get the list of files in mypath
 def loadListOfQueries(mypath):
     from os import listdir
     from os.path import isfile, join
-    onlyfiles = [ f for f in listdir(mypath) if isfile(join(mypath,f)) ]
+    onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
     return onlyfiles
 
-# extract testname and allowed tablesets
 def parseFileName(str):
     end = str.rfind(".")
     begin = str.rfind("/")
-    if (begin < 0):
-        begin = 0;
-    begin=begin+1;
+    if begin < 0:
+        begin = 0
+    begin = begin + 1
     baseName = str[begin:-(len(str)-end)]
-    temp = baseName.split("__");
-    testName =  temp[0];
-    tableSets =  temp[1];
-    return testName, tableSets;
+    temp = baseName.split("__")
+    testName = temp[0]
+    tableSets = temp[1]
+    return testName, tableSets
 
-# generate tablesets arguments for S2RDF Query Translator
 def parseArgs(str):
-    result = "";
-    if "SO" in str: result+=" -so";
-    if "OS" in str: result+=" -os";
-    if "SS" in str: result+=" -ss";
-    return result;
+    result = ""
+    if "SO" in str: result += " -so"
+    if "OS" in str: result += " -os"
+    if "SS" in str: result += " -ss"
+    return result
 
 def readFileToString(fileName):    
     with open(fileName) as myFile: return myFile.read()
     
 def addStringToFile(fileName, str, queryName):
-    with open(fileName, "a") as myFile: myFile.write(">>>>>>"+queryName+"\n"+str)
+    with open(fileName, "a") as myFile: myFile.write(">>>>>>" + queryName + "\n" + str)
     
-# execute S2RDF Query Translator
 def executeCommand(fileName, sqlDir, tableName, baseName, args):
     global statisticsDir, S2RDFQueryTranslator, scaleUB
-    outPutFileName = (sqlDir+"/"+baseName+"__"+tableName).replace("//", "/")
+    outPutFileName = (sqlDir + "/" + baseName + "__" + tableName).replace("//", "/")
     command = ("java -jar " + S2RDFQueryTranslator
     + " -i " + fileName + " -o " + outPutFileName
     + " " + args
-    +" -sd " + statisticsDir +" -sUB " + scaleUB)
-    print("\n" + command)
-    status =  subprocess.call(command, shell=True);
-    query = readFileToString(outPutFileName+".sql")
-    
+    + " -sd " + statisticsDir + " -sUB " + scaleUB)
+    #print("\n" + command)
+    status = subprocess.call(command, shell=True)
+    query = readFileToString(outPutFileName + ".sql")
+    #print("\n" + sqlDir)
     # add to composite query file (all queries of the input directory)
-    addStringToFile(sqlDir+"compositeQueryFile.txt", query, baseName+"__"+tableName)
-    command = command.replace("//", "/")
+    addStringToFile(sqlDir + "/compositeQueryFile.txt", query, baseName + "__" + tableName)
     return status
 
 def translateQuery(fileName, sqlDir):    
-    global statisticsDir, dataSetName
-    if ((not "~" in fileName) and (not "rdf3x" in fileName)):
-        print ("Parse " + fileName)
+    global dataSetName
+    if ("~" not in fileName) and ("rdf3x" not in fileName):
+        #print("Parse " + fileName)
         testName, tableSets = parseFileName(fileName)
         for case in tableSets.split("_"):
             args = parseArgs(case)
-            status = executeCommand(fileName, sqlDir, dataSetName, testName+"--"+case, args)
-        subprocess.call("rm -f "+sqlDir+"/*.log", shell=True)
+            status = executeCommand(fileName, sqlDir, dataSetName, testName + "--" + case, args)
+        subprocess.call("rm -f " + sqlDir + "/*.log", shell=True)
+
+# --------------------------------------------------------------------------------
+# Main function pour traiter les arguments de ligne de commande et lancer le processus de traduction
 
 def main(argv):
+    global dataSetName, statisticsDir, scaleUB
+    
     sparqlDir = ''
     sqlDir = ''
+    dataSetPath = ''
+    
     try:
-      opts, args = getopt.getopt(argv,"hs:t:",["sdir=","tdir="])
+        opts, args = getopt.getopt(argv, "hs:t:d:u:", ["sdir=", "tdir=", "dbdir=", "scaleUB="])
     except getopt.GetoptError:
-      print 'translateWatDivQueries.py -s <sparqlDir> -t <sqlDir>'
-      sys.exit(2)
+        print('Usage: translateWatDivQueries.py -s <sparqlDir> -t <sqlDir> -d <dataSetPath> -u <scaleUB>')
+        sys.exit(2)
+    
     for opt, arg in opts:
-      if opt == '-h':
-         print 'translateWatDivQueries.py -s <sparqlDir> -t <sqlDir>'
-         sys.exit()
-      elif opt in ("-s", "--sparqlDir"):
-         sparqlDir = arg
-      elif opt in ("-t", "--sqlDir"):
-         sqlDir = arg
-    if (len(sparqlDir) == 0):
-        print 'translateWatDivQueries.py -s <sparqlDir> -t <sqlDir>'
+        if opt == '-h':
+            print('Usage: translateWatDivQueries.py -s <sparqlDir> -t <sqlDir> -d <dataSetPath> -u <scaleUB>')
+            sys.exit()
+        elif opt in ("-s", "--sdir"):
+            sparqlDir = arg
+        elif opt in ("-t", "--tdir"):
+            sqlDir = arg
+        elif opt in ("-d", "--dbdir"):
+            dataSetPath = arg
+            dataSetName = os.path.basename(dataSetPath) 
+            statisticsDir = dataSetPath+"/stats/"
+        elif opt in ("-u", "--scaleUB"):
+            scaleUB = arg
+
+    if not sparqlDir or not sqlDir or not dataSetPath:
+        print('Missing required directories. Usage: translateWatDivQueries.py -s <sparqlDir> -t <sqlDir> -d <dataSetPath> -u <scaleUB>')
         sys.exit()
-    if (len(sqlDir) == 0):
-        sqlDir = "./";
-    print 'Input Dir is "', sparqlDir
-    print 'Output Dir is "', sqlDir
-    sparqlList = loadListOfQueries(sparqlDir);
-    subprocess.call("rm -f "+sqlDir+"/*.*", shell=True)
+
+    print(f'Input Dir is "{sparqlDir}"')
+    print(f'Output Dir is "{sqlDir}"')
+    print(f'Dataset Name is "{dataSetName}"')
+    print(f'Scale UB is "{scaleUB}"')
+
+    sparqlList = loadListOfQueries(sparqlDir)
+    subprocess.call("rm -f " + sqlDir + "/*.*", shell=True)
     
     for fileName in sparqlList:
-        translateQuery(sparqlDir+"/"+fileName, sqlDir)
+        translateQuery(os.path.join(sparqlDir, fileName), sqlDir)
 
 if __name__ == "__main__":
-   main(sys.argv[1:])
-
+    main(sys.argv[1:])
