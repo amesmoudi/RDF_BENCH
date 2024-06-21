@@ -6,7 +6,7 @@ services:
     hostname: master
     volumes:
       - /hdfs:/opt/hdfs/
-      - /data:/data
+      - /home/ubuntu/mounted_vol:/data
     ports:
       - "2222:22"
       - "50070:50070"
@@ -15,87 +15,189 @@ services:
       replicas: 1
       resources:
         limits:
-          memory: 30G # Limite la mémoire à 500 Mo
+          memory: 25G # Limite la mémoire à 500 Mo
         reservations:
-          memory: 28G # Réserve au moins 200 Mo de mémoire pour ce service
+          memory: 25G # Réserve au moins 200 Mo de mémoire pour ce service
       placement:
         constraints:
-          - node.hostname == bench-master
+          - node.hostname == master
     networks:
       - sohad-network
 
-  worker01:
+  worker-1:
     image: sohad_worker:latest
-    hostname: worker01
+    hostname: worker-1
     volumes:
-      - /hdfs:/opt/hdfs/
+      - /home/ubuntu/mounted_vol:/opt/hdfs/
     deploy:
       replicas: 1
       resources:
         limits:
-          memory: 30G # Limite la mémoire à 30 Go
+          memory: 25G # Limite la mémoire à 30 Go
         reservations:
-          memory: 28G # Réserve au moins 28G de mémoire pour ce service
+          memory: 25G # Réserve au moins 28G de mémoire pour ce service
       placement:
         constraints:
-          - node.hostname == worker01
+          - node.hostname == worker-1
     networks:
       - sohad-network
 
-  worker02:
+  worker-2:
     image: sohad_worker:latest
-    hostname: worker02
+    hostname: worker-2
     volumes:
-      - /hdfs:/opt/hdfs/
+      - /home/ubuntu/mounted_vol:/opt/hdfs/
     deploy:
       replicas: 1
       resources:
         limits:
-          memory: 30G # Limite la mémoire à 30 Go
+          memory: 25G # Limite la mémoire à 30 Go
         reservations:
-          memory: 28G # Réserve au moins 28G de mémoire pour ce service
+          memory: 25G # Réserve au moins 28G de mémoire pour ce service
       placement:
         constraints:
-          - node.hostname == worker02
+          - node.hostname == worker-2
     networks:
       - sohad-network
 
-  worker03:
+  worker-3:
     image: sohad_worker:latest
-    hostname: worker03
+    hostname: worker-3
     volumes:
-      - /hdfs:/opt/hdfs/
+      - /home/ubuntu/mounted_vol:/opt/hdfs/
     deploy:
       replicas: 1
       resources:
         limits:
-          memory: 30G # Limite la mémoire à 30 Go
+          memory: 25G # Limite la mémoire à 30 Go
         reservations:
-          memory: 28G # Réserve au moins 28G de mémoire pour ce service
+          memory: 25G # Réserve au moins 28G de mémoire pour ce service
       placement:
         constraints:
-          - node.hostname == worker03
+          - node.hostname == worker-3
     networks:
       - sohad-network
 
-  worker04:
+  worker-4:
     image: sohad_worker:latest
-    hostname: worker04
+    hostname: worker-4
     volumes:
-      - /hdfs:/opt/hdfs/
+      - /home/ubuntu/mounted_vol:/opt/hdfs/
     deploy:
       replicas: 1
       resources:
         limits:
-          memory: 30G # Limite la mémoire à 30 Go
+          memory: 25G # Limite la mémoire à 30 Go
         reservations:
-          memory: 28G # Réserve au moins 28G de mémoire pour ce service
+          memory: 25G # Réserve au moins 28G de mémoire pour ce service
       placement:
         constraints:
-          - node.hostname == worker04
+          - node.hostname == worker-4
     networks:
       - sohad-network
-
+  worker-5:
+    image: sohad_worker:latest
+    hostname: worker-5
+    volumes:
+      - /home/ubuntu/mounted_vol:/opt/hdfs/
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 25G # Limite la mémoire à 30 Go
+        reservations:
+          memory: 25G # Réserve au moins 28G de mémoire pour ce service
+      placement:
+        constraints:
+          - node.hostname == worker-5
+    networks:
+      - sohad-network
+  worker-6:
+    image: sohad_worker:latest
+    hostname: worker-6
+    volumes:
+      - /home/ubuntu/mounted_vol:/opt/hdfs/
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 25G # Limite la mémoire à 30 Go
+        reservations:
+          memory: 25G # Réserve au moins 28G de mémoire pour ce service
+      placement:
+        constraints:
+          - node.hostname == worker-6
+    networks:
+      - sohad-network
+  worker-7:
+    image: sohad_worker:latest
+    hostname: worker-7
+    volumes:
+      - /home/ubuntu/mounted_vol:/opt/hdfs/
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 25G # Limite la mémoire à 30 Go
+        reservations:
+          memory: 25G # Réserve au moins 28G de mémoire pour ce service
+      placement:
+        constraints:
+          - node.hostname == worker-7
+    networks:
+      - sohad-network
+  worker-8:
+    image: sohad_worker:latest
+    hostname: worker-8
+    volumes:
+      - /home/ubuntu/mounted_vol:/opt/hdfs/
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 25G # Limite la mémoire à 30 Go
+        reservations:
+          memory: 25G # Réserve au moins 28G de mémoire pour ce service
+      placement:
+        constraints:
+          - node.hostname == worker-8
+    networks:
+      - sohad-network
+  worker-9:
+    image: sohad_worker:latest
+    hostname: worker-9
+    volumes:
+      - /home/ubuntu/mounted_vol:/opt/hdfs/
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 25G # Limite la mémoire à 30 Go
+        reservations:
+          memory: 25G # Réserve au moins 28G de mémoire pour ce service
+      placement:
+        constraints:
+          - node.hostname == worker-9
+    networks:
+      - sohad-network
+  worker-10:
+    image: sohad_worker:latest
+    hostname: worker-10
+    volumes:
+      - /home/ubuntu/mounted_vol:/opt/hdfs/
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 25G # Limite la mémoire à 30 Go
+        reservations:
+          memory: 25G # Réserve au moins 28G de mémoire pour ce service
+      placement:
+        constraints:
+          - node.hostname == worker-10
+    networks:
+      - sohad-network
 networks:
   sohad-network:
     driver: overlay
+

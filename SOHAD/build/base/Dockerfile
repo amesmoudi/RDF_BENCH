@@ -8,7 +8,7 @@ RUN add-apt-repository ppa:openjdk-r/ppa
 
 # Met à jour les paquets et installe les logiciels nécessaires
 RUN apt-get update \
-    && apt install -y arp-scan python3 python2 gnupg2 curl nano dnsutils iputils-ping net-tools openjdk-8-jre openjdk-8-jdk pip ssh git openssh-server  \
+    && apt install -y arp-scan python3 gnupg2 curl unzip  nano dnsutils iputils-ping net-tools openjdk-8-jre openjdk-8-jdk  ssh git openssh-server  \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -18,6 +18,7 @@ RUN mkdir -p /root/.ssh/
 ADD ssh/* /root/.ssh/
 RUN chmod 600 /root/.ssh/id_rsa
 RUN chmod 600 /root/.ssh/id_ed25519
+RUN chmod 600 /root/.ssh/pqdag
 
 WORKDIR /root/
 

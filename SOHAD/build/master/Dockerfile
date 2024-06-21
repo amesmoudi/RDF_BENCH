@@ -12,10 +12,8 @@ RUN chmod +x loadData.sh
 ADD ./scripts/replaceNS.py /root/
 COPY workspace /opt/workspace
 RUN mkdir /data/
-RUN apt install -y screen
-RUN echo "export JAVA_OPTS=\"$JAVA_OPTS -Dhttp.proxyHost=cache.univ-poitiers.fr -Dhttp.proxyPort=3128  -Dhttps.proxyHost=cache.univ-poitiers.fr -Dhttps.proxyPort=3128\"">> /root/.bashrc 
-RUN echo "export http_proxy=http://cache.univ-poitiers.fr:3128">> /root/.bashrc 
-RUN echo "export https_proxy=http://cache.univ-poitiers.fr:3128">> /root/.bashrc 
+RUN apt-get update
+RUN apt-get install -y screen
 WORKDIR /opt/workspace
 CMD ["/usr/sbin/sshd", "-D"]
 

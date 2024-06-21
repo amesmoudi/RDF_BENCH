@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  base:
+    build:
+      context: './build/base'
+    image: gstored-base
+
+  master:
+    build:
+      context: './build/master'
+    image: gstored-master
+
+  worker:
+    build:
+      context: './build/worker'
+    image: gstored-worker

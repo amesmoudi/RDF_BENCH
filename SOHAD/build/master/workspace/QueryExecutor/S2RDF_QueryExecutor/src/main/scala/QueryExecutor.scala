@@ -16,7 +16,7 @@ object QueryExecutor {
   private val _sc = Settings.sparkContext
   private val _sqlContext = Settings.sqlContext
   private var _queryList:ListBuffer[Query] = null
-  
+  private var start_boumi = 0L 
   private var allFirstExecution = true;
   
   /**
@@ -271,15 +271,21 @@ object QueryExecutor {
       var start = System.currentTimeMillis
       var temp = _sqlContext.sql(qr.query)
       resSize = temp.count()
+      //println(temp.show(Int.MaxValue))
+      //temp.write.format("csv").save("/data/results.txt")
+      val rowCount: Long = temp.count()
+      val maxInt: Int = Int.MaxValue
+      temp.show(if (rowCount > maxInt) maxInt else rowCount.toInt, false)
       var time = System.currentTimeMillis - start;
       temp = null;
       if (tId > 1) resString+="/"
       resString += time;
     }
-    resString + "ms ("+resSize+")"
+    resString + "ms ("+resSize+")" + " cache time load:"+( System.currentTimeMillis() - start_boumi)
   }
   
-  def runTests() = {   
+  
+  def runTests() = {
     var temp = extructQueryNames(_queryList).sorted;
     var queryNames = ListBuffer[String]()
     queryNames ++= extractAllExtVPTestNames(temp)
@@ -288,9 +294,9 @@ object QueryExecutor {
     var results = HashMap[String, String]()
     var testSet = ""
     for (queryN <- queryNames) if (queryN.contains("SO")){      
-      
+    
       var query = getQueryByName(queryN, _queryList)
-      
+      start_boumi = System.currentTimeMillis;
       // Example queryName IL5-1-U-1--SO-OS-SS-VP__WatDiv1M
       var actualPrefix = queryN.substring(0, queryN.indexOf("--"))
       // = IL5-1-U-1
@@ -334,12 +340,13 @@ object QueryExecutor {
       // Run Tests
       // Execute a dummy execution, since all first execution is always slower
       // than the following executions
-      if (allFirstExecution){ 
+      /*if (allFirstExecution){ 
         var temp = executeQuery(query) 
         allFirstExecution = false
-      }
+      }*/
       results(query.queryName) = executeQuery(query)
       println(results(query.queryName))
+      //var time = System.currentTimeMillis - start;
     }    
     //print results    
     printResults(results)

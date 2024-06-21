@@ -3,7 +3,7 @@ import sys
 def generate_worker_ids(num_workers, output_file):
     with open(output_file, 'w') as file:
         for i in range(1, num_workers + 1):
-            worker_id = "worker{0:02d}".format(i)
+            worker_id = "worker-" + str(i)
             file.write(worker_id + '\n')
 
 def main():

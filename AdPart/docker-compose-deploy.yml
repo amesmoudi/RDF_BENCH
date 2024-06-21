@@ -3,105 +3,175 @@ version: '3.9'
 services:
   master:
     image: adpart-master:latest
-    hostname: adpart-master-1
+    hostname: master
     volumes:
-      - /data:/data/
+      - /home/ubuntu/mounted_vol:/data
     ports:
-      - "2222:22"
+      - "2223:22"
     deploy:
       replicas: 1
       placement:
         constraints:
-          - node.hostname == bench-master
+          - node.hostname == master
+    networks:
+      - adpart-network
+  worker-1:
+    image: adpart-worker:latest
+    hostname: worker-1
+    volumes:
+      - /home/ubuntu/mounted_vol:/data
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == worker-1
+    networks:
+      - adpart-network
+  worker-2:
+    image: adpart-worker:latest
+    hostname: worker-2
+    volumes:
+      - /home/ubuntu/mounted_vol:/data
+    deploy:
+      replicas: 1    
+      placement:
+        constraints:
+          - node.hostname == worker-2
     networks:
       - adpart-network
 
-  worker01:
+  worker-3:
     image: adpart-worker:latest
-    hostname: adpart-worker01
+    hostname: worker-3
     volumes:
-      - /data:/data/
+      - /home/ubuntu/mounted_vol:/data
     deploy:
       replicas: 1
       placement:
         constraints:
-          - node.hostname == worker01
+          - node.hostname == worker-3
     networks:
       - adpart-network
 
-  worker02:
+  worker-4:
     image: adpart-worker:latest
-    hostname: adpart-worker02
+    hostname: worker-4
     volumes:
-      - /data:/data/
+      - /home/ubuntu/mounted_vol:/data
     deploy:
       replicas: 1
+      
+        
+          
+        
+          
       placement:
         constraints:
-          - node.hostname == worker02
+          - node.hostname == worker-4
     networks:
       - adpart-network
-  worker03:
+  worker-5:
     image: adpart-worker:latest
-    hostname: adpart-worker03
+    hostname: worker-5
     volumes:
-      - /data:/data/
+      - /home/ubuntu/mounted_vol:/data
     deploy:
       replicas: 1
+      
+        
+          
+        
+          
       placement:
         constraints:
-          - node.hostname == worker03
+          - node.hostname == worker-5
     networks:
       - adpart-network
-  worker04:
+  worker-6:
     image: adpart-worker:latest
-    hostname: adpart-worker04
+    hostname: worker-6
     volumes:
-      - /data:/data/
+      - /home/ubuntu/mounted_vol:/data
     deploy:
       replicas: 1
+      
+        
+          
+        
+          
       placement:
         constraints:
-          - node.hostname == worker04
+          - node.hostname == worker-6
     networks:
       - adpart-network
-  worker05:
+  worker-7:
     image: adpart-worker:latest
-    hostname: adpart-worker05
+    hostname: worker-7
     volumes:
-      - /data:/data/
+      - /home/ubuntu/mounted_vol:/data
     deploy:
       replicas: 1
+      
+        
+          
+        
+          
       placement:
         constraints:
-          - node.hostname == worker05
+          - node.hostname == worker-7
     networks:
       - adpart-network
-  worker06:
+  worker-8:
     image: adpart-worker:latest
-    hostname: adpart-worker06
+    hostname: worker-8
     volumes:
-      - /data:/data/
+      - /home/ubuntu/mounted_vol:/data
     deploy:
       replicas: 1
+      
+        
+          
+        
+          
       placement:
         constraints:
-          - node.hostname == worker06
+          - node.hostname == worker-8
     networks:
       - adpart-network
-  worker07:
+  worker-9:
     image: adpart-worker:latest
-    hostname: adpart-worker07
+    hostname: worker-9
     volumes:
-      - /data:/data/
+      - /home/ubuntu/mounted_vol:/data
     deploy:
       replicas: 1
+      
+        
+          
+        
+          
       placement:
         constraints:
-          - node.hostname == worker07
+          - node.hostname == worker-9
     networks:
       - adpart-network
-
+  worker-10:
+    image: adpart-worker:latest
+    hostname: worker-10
+    volumes:
+      - /home/ubuntu/mounted_vol:/data
+    deploy:
+      replicas: 1
+      
+        
+          
+        
+          
+      placement:
+        constraints:
+          - node.hostname == worker-10
+    networks:
+      - adpart-network
 networks:
   adpart-network:
     driver: overlay

@@ -76,11 +76,16 @@ object DataSetGenerator {
    * Generate TripleTable and save it to Parquet file in HDFS.
    * The table has to be cached, since it is used for generation of VP and ExtVP
    */
-  private def createTT() = {      
+  private def createTT() = { 
+    
+  //val df = _sc.createDataFrame(processedRDD, classOf[Triple])
     val df = _sc.textFile(Settings.inputRDFSet)
                          .map(_.split("\t"))
+                         .filter(_.length == 3)
                          .map(p => Triple(p(0), p(1), p(2)))
                          .toDF()
+                df.show()
+                    
     // Commented out due to execution problem for dataset of 1 Bil triples
     // We do not need it anyway if the input dataset is correct and has no
     // double ellements. It was not the case for WatDiv
@@ -120,10 +125,12 @@ object DataSetGenerator {
     for (predicate <- _uPredicates){      
       var vpTable = _sqlContext.sql("select sub, obj "
                                   + "from triples where pred='"+predicate+"'")          
-      
+      println("pred:"+predicate)
       val cleanPredicate = Helper.getPartName(predicate)  
       vpTable.registerTempTable(cleanPredicate)
+      println("clean pred:"+cleanPredicate)
       _sqlContext.cacheTable(cleanPredicate)
+      println("after cache")
       _vpTableSizes(predicate) = vpTable.count()
       
       vpTable.saveAsParquetFile(Settings.vpDir + cleanPredicate + ".parquet")
