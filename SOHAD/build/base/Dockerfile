@@ -18,7 +18,6 @@ RUN mkdir -p /root/.ssh/
 ADD ssh/* /root/.ssh/
 RUN chmod 600 /root/.ssh/id_rsa
 RUN chmod 600 /root/.ssh/id_ed25519
-RUN chmod 600 /root/.ssh/pqdag
 
 WORKDIR /root/
 
@@ -38,7 +37,7 @@ WORKDIR /opt
 #ADD automatically untars
 
 #add path variables for JDK
-ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64
+ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 ENV PATH=$PATH:$JAVA_HOME:$JAVA_HOME/bin
 
 
