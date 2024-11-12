@@ -1,0 +1,6 @@
+#!/usr/bin/python3
+# Usage ./start-master qdag_instalation_folder
+import sys, os
+
+folder = sys.argv[1]
+os.system("/opt/jdk-11.0.22/bin/java -jar %s/jars/master.jar > %s/logs/pqdag.master.log 2>&1 & echo $!>%s/master.pid" %(folder,folder,folder))

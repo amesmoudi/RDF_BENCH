@@ -1,0 +1,8 @@
+SELECT ?p WHERE
+{
+?p <hasGivenName> ?n .
+?p <hasFamilyName> ?f .
+?p <hasWonPrize> ?w .
+?p <diedIn> ?c .
+?c <hasGeometry> ?g .
+};

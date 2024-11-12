@@ -1,0 +1,9 @@
+SELECT ?GivenName ?FamilyName WHERE{
+    ?p <hasGivenName> ?GivenName . 
+    ?p <hasFamilyName> ?FamilyName . 
+    ?p <wasBornIn> ?city . 
+    ?p <hasAcademicAdvisor> ?a .
+    ?a <wasBornIn> ?city .
+    ?p <isMarriedTo> ?p2 .
+    ?p2 <wasBornIn> ?city .
+}

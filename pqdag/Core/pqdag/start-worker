@@ -1,0 +1,21 @@
+#!/usr/bin/python3
+# Usage: ./start-worker pqdag_installation_folder
+import sys
+import os
+
+folder = sys.argv[1]
+
+# Expand the user's home directory and set the working directory
+working_directory = os.path.expanduser('~/pqdag')
+
+# Ensure the working directory exists
+if not os.path.isdir(working_directory):
+    print(f"Working directory {working_directory} does not exist.")
+    sys.exit(1)
+
+# Change the working directory to ~/pqdag
+os.chdir(working_directory)
+
+# Now run the Java process
+os.system("java -Djava.library.path=solibs/ -jar jars/worker.jar > logs/pqdag.worker.log 2>&1 & echo $!>worker.pid")
+

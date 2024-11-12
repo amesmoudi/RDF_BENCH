@@ -1,0 +1,34 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug NewFastEncoder",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/app/NewFastEncoder/Release/NewFastEncoder",
+            "args": ["/rawdata/","/bindata/watdiv100k.nt"],
+            "stopAtEntry": false,
+            "cwd": "/app/NewFastEncoder/Release",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Disable stopping on shared library events",
+                    "text": "set stop-on-solib-events 0"
+                }
+            ],
+            "preLaunchTask": "Build NewFastEncoder",
+            "logging": {
+                "engineLogging": true
+            },
+            "internalConsoleOptions": "openOnSessionStart"
+        }
+    ]
+}
