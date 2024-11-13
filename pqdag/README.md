@@ -36,7 +36,7 @@ Instructions for the allocation process are available in the [Allocation README]
 
 Once fragmentation and allocation are complete, proceed with the **installation of the PQDAG core system**. The core system includes the components required to process queries over the fragmented and allocated RDF data.
 
-To install and configure the PQDAG core system, follow the steps in the [Core System Installation README](./CORE/README.md).
+To install and configure the PQDAG core system, follow the steps in the [Core System Installation README](./Core/README.md).
 
 ---
 
